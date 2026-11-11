@@ -62,7 +62,7 @@ Threats: {t}'''
 4. Action plan 30/60/90 hari dengan metrik keberhasilan.
 Jangan mengarang fakta eksternal. Bedakan inferensi dari fakta input. Jika input tidak cukup, sebutkan asumsi atau keterbatasan. Jangan menjanjikan hasil bisnis. Jangan menulis instruksi di luar laporan.'''
             try:
-                with st.spinner('AI sedang menyusun analisis...'):
+                with st.spinner('AI is preparing an analysis...'):
                     client = OpenAI(api_key=key, timeout=45.0, max_retries=1)
                     response = client.responses.create(
                         model='gpt-5.5',
@@ -73,15 +73,15 @@ Jangan mengarang fakta eksternal. Bedakan inferensi dari fakta input. Jika input
                     )
                     text = response.output_text
                     if not text:
-                        raise ValueError('Model tidak menghasilkan teks. Coba kembali.')
+                        raise ValueError('The model did not generate any text. Please try again.')
                     st.session_state.ai_result = text
             except Exception as exc:
-                st.error('Gagal memanggil layanan AI. Periksa API key, billing, kuota, dan koneksi. Detail: ' + str(exc))
+                st.error('Failed to call the AI ​​service. Please check your API key, billing, quota, and connection. Details: ' + str(exc))
 
 if st.session_state.ai_result:
-    st.subheader('✨ Hasil Analisis AI')
+    st.subheader('✨ Result')
     st.markdown(st.session_state.ai_result)
     st.download_button('⬇️ Download AI SWOT Report (.md)',
-                       data='# SWOT AI Report: ' + (project or 'Analisis') + '\n\n' + st.session_state.ai_result,
+                       data='# SWOT AI Report: ' + (project or 'Analysis') + '\n\n' + st.session_state.ai_result,
                        file_name='swot_ai_report.md', mime='text/markdown')
-    st.caption('Output AI perlu diperiksa kembali, terutama untuk keputusan bisnis penting.')
+    st.caption('AI output needs to be double-checked, especially for important business decisions.')
